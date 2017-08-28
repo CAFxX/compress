@@ -837,15 +837,7 @@ func (f *decompressor) Reset(r io.Reader, dict []byte) error {
 //
 // The ReadCloser returned by NewReader also implements Resetter.
 func NewReader(r io.Reader) io.ReadCloser {
-	fixedHuffmanDecoderInit()
-
-	var f decompressor
-	f.r = makeReader(r)
-	f.bits = new([maxNumLit + maxNumDist]int)
-	f.codebits = new([numCodes]int)
-	f.step = (*decompressor).nextBlock
-	f.dict.init(maxMatchOffset, nil)
-	return &f
+	return NewReaderDict(r, nil)
 }
 
 // NewReaderDict is like NewReader but initializes the reader
